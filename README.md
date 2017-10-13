@@ -4,7 +4,7 @@ A Twitter client for Android as an exercise of the Mobile Devices subject of CS 
 ## Features
 - Post tweets on your Twitter account
 
-## Development
+## Development
 
 ### Getting started
 Follow the next steps to get the project ready for development:
