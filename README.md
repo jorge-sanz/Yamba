@@ -20,5 +20,5 @@ Follow the next steps to get the project ready for development:
 - [Twitter4J](http://twitter4j.org/en/index.html) - Twitter API client for Java.
 
 ## Resources
-A list of resources that have been useful for the development or related to the technology of the app.
+A list of resources that have been useful for the development or related to the technology of the app:
 - [Article: Storing Secret Keys in Android](https://guides.codepath.com/android/Storing-Secret-Keys-in-Android)
