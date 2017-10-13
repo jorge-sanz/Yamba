@@ -1,12 +1,16 @@
 package xyz.jorgesanz.yamba;
 
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import twitter4j.Twitter;
@@ -14,12 +18,15 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
-public class StatusActivity extends AppCompatActivity implements View.OnClickListener {
+public class StatusActivity
+        extends AppCompatActivity
+        implements View.OnClickListener, TextWatcher {
 
     private static final String TAG = "StatusActivity";
     EditText statusEditText;
     Button tweetButton;
     Twitter twitter;
+    TextView charsCounterTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +36,10 @@ public class StatusActivity extends AppCompatActivity implements View.OnClickLis
         statusEditText = (EditText) findViewById(R.id.status_edit_text);
         tweetButton = (Button) findViewById(R.id.tweet_button);
         tweetButton.setOnClickListener(this);
+        charsCounterTextView = (TextView) findViewById(R.id.chars_counter_text_view);
+        charsCounterTextView.setText(Integer.toString(140));
+        charsCounterTextView.setTextColor(Color.GREEN);
+        statusEditText.addTextChangedListener(this);
 
         ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
         configurationBuilder.setOAuthConsumerKey(getString(R.string.oauth_consumer_key))
@@ -44,6 +55,25 @@ public class StatusActivity extends AppCompatActivity implements View.OnClickLis
         Log.d(TAG, "onClicked");
 
         new PostTask().execute(status);
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable statusEditText) {
+        int count = 140 - statusEditText.length();
+        charsCounterTextView.setText(Integer.toString(count));
+        charsCounterTextView.setTextColor(Color.GREEN);
+        if (count < 10) charsCounterTextView.setTextColor(Color.YELLOW);
+        if (count < 0) charsCounterTextView.setTextColor(Color.RED);
     }
 
     private final class PostTask extends AsyncTask<String, Void, String> {
