@@ -81,27 +81,41 @@ public class StatusFragment
         if (count < 0) charsCounterTextView.setTextColor(Color.RED);
     }
 
-    private final class PostTask extends AsyncTask<String, Void, String> {
+    private final class PostTask extends AsyncTask<String, Void, SendingStatus> {
 
         @Override
-        protected String doInBackground(String... params) {
+        protected SendingStatus doInBackground(String... params) {
             try {
                 twitter.updateStatus(params[0]);
-                return "Tweet sending success";
+                return SendingStatus.SUCCESSFUL;
             } catch (TwitterException e) {
                 Log.e(TAG, "Sending failure");
                 e.printStackTrace();
-                return "Tweet sending failure";
+                if (e.getErrorCode() == -1) return SendingStatus.NETWORK_FAILED;
+                return SendingStatus.TOKEN_FAILED;
             }
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(SendingStatus result) {
             super.onPostExecute(result);
-            Snackbar.make(StatusFragment.this.getView(),
-                    R.string.tweet_sent_snackbar_text,
-                    Snackbar.LENGTH_LONG)
-                    .show();
+
+            if (result == SendingStatus.SUCCESSFUL) {
+                Snackbar.make(StatusFragment.this.getView(),
+                        R.string.tweet_sent_snackbar_text,
+                        Snackbar.LENGTH_LONG)
+                        .show();
+            } else if (result == SendingStatus.TOKEN_FAILED) {
+                Snackbar.make(StatusFragment.this.getView(),
+                        R.string.tweet_sending_token_failure_snackbar_text,
+                        Snackbar.LENGTH_LONG)
+                        .show();
+            } else {
+                Snackbar.make(StatusFragment.this.getView(),
+                        R.string.tweet_sending_network_failure_snackbar_text,
+                        Snackbar.LENGTH_LONG)
+                        .show();
+            }
         }
     }
 }
