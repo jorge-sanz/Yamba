@@ -1,9 +1,10 @@
 package xyz.jorgesanz.yamba;
 
+import android.app.Fragment;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.design.widget.Snackbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -13,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -98,7 +98,10 @@ public class StatusFragment
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            Toast.makeText(StatusFragment.this.getActivity(), R.string.tweet_sent_toast_text, Toast.LENGTH_LONG).show();
+            Snackbar.make(StatusFragment.this.getView(),
+                    R.string.tweet_sent_snackbar_text,
+                    Snackbar.LENGTH_LONG)
+                    .show();
         }
     }
 }
