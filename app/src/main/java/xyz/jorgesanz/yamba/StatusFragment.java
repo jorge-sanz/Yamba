@@ -98,7 +98,7 @@ public class StatusFragment
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            Toast.makeText(StatusFragment.this.getActivity(), "Tweet sent", Toast.LENGTH_LONG).show();
+            Toast.makeText(StatusFragment.this.getActivity(), R.string.tweet_sent_toast_text, Toast.LENGTH_LONG).show();
         }
     }
 }

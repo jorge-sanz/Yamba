@@ -3,5 +3,5 @@
     <string name="title_status_label">Actualización de Estado</string>
     <string name="status_edit_text_hint">¿Qué está pasando?</string>
     <string name="tweet_button_text">Tweet</string>
-    <string name="tweet_sent_toast">Tweet enviado</string>
+    <string name="tweet_sent_toast_text">Tweet enviado</string>
 </resources>
