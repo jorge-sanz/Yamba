@@ -6,4 +6,5 @@
     <string name="tweet_sent_snackbar_text">Tweet enviado</string>
     <string name="tweet_sending_token_failure_snackbar_text">Error: tokens incorrectos</string>
     <string name="tweet_sending_network_failure_snackbar_text">Error: falló la conexión</string>
+    <string name="tweet_sending_unknown_failure_snackbar_text">Error desconocido</string>
 </resources>
