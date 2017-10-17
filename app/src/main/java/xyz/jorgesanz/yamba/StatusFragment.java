@@ -1,9 +1,10 @@
 package xyz.jorgesanz.yamba;
 
+import android.app.Fragment;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.design.widget.Snackbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -12,8 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
@@ -29,6 +31,8 @@ public class StatusFragment
     Button tweetButton;
     Twitter twitter;
     TextView charsCounterTextView;
+    ProgressBar tweetSendingProgressBar;
+    ImageView twitterLogoImageView;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -36,13 +40,17 @@ public class StatusFragment
                                 Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_status, container, false);
 
-        statusEditText = (EditText) view.findViewById(R.id.status_edit_text);
-        tweetButton = (Button) view.findViewById(R.id.tweet_button);
+        statusEditText = view.findViewById(R.id.status_edit_text);
+        tweetButton = view.findViewById(R.id.tweet_button);
         tweetButton.setOnClickListener(this);
-        charsCounterTextView = (TextView) view.findViewById(R.id.chars_counter_text_view);
+        charsCounterTextView = view.findViewById(R.id.chars_counter_text_view);
         charsCounterTextView.setText(Integer.toString(140));
         charsCounterTextView.setTextColor(Color.GREEN);
         statusEditText.addTextChangedListener(this);
+        tweetSendingProgressBar = view.findViewById(R.id.tweet_sending_progress_bar);
+        tweetSendingProgressBar.setVisibility(View.GONE);
+        twitterLogoImageView = view.findViewById(R.id.twitter_logo_image_view);
+        twitterLogoImageView.setVisibility(View.VISIBLE);
 
         ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
         configurationBuilder.setOAuthConsumerKey(getString(R.string.oauth_consumer_key))
@@ -81,24 +89,60 @@ public class StatusFragment
         if (count < 0) charsCounterTextView.setTextColor(Color.RED);
     }
 
-    private final class PostTask extends AsyncTask<String, Void, String> {
+    private final class PostTask extends AsyncTask<String, Integer, SendingStatus> {
 
         @Override
-        protected String doInBackground(String... params) {
+        protected SendingStatus doInBackground(String... params) {
+
             try {
                 twitter.updateStatus(params[0]);
-                return "Tweet sending success";
+                return SendingStatus.SUCCESSFUL;
             } catch (TwitterException e) {
                 Log.e(TAG, "Sending failure");
                 e.printStackTrace();
-                return "Tweet sending failure";
+                if (e.getErrorCode() == -1) return SendingStatus.NETWORK_FAILED;
+                return SendingStatus.TOKEN_FAILED;
             }
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(SendingStatus result) {
             super.onPostExecute(result);
-            Toast.makeText(StatusFragment.this.getActivity(), "Tweet sent", Toast.LENGTH_LONG).show();
+
+            tweetSendingProgressBar.setVisibility(View.GONE);
+            twitterLogoImageView.setVisibility(View.VISIBLE);
+
+            if (result == SendingStatus.SUCCESSFUL) {
+                Snackbar.make(StatusFragment.this.getView(),
+                        R.string.tweet_sent_snackbar_text,
+                        Snackbar.LENGTH_LONG)
+                        .show();
+            } else if (result == SendingStatus.TOKEN_FAILED) {
+                Snackbar.make(StatusFragment.this.getView(),
+                        R.string.tweet_sending_token_failure_snackbar_text,
+                        Snackbar.LENGTH_LONG)
+                        .show();
+            } else {
+                Snackbar.make(StatusFragment.this.getView(),
+                        R.string.tweet_sending_network_failure_snackbar_text,
+                        Snackbar.LENGTH_LONG)
+                        .show();
+            }
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+            super.onProgressUpdate(progress);
+
+            tweetSendingProgressBar.setProgress(progress[0]);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            twitterLogoImageView.setVisibility(View.GONE);
+            tweetSendingProgressBar.setVisibility(View.VISIBLE);
         }
     }
 }

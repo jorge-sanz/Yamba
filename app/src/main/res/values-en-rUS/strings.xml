@@ -3,5 +3,7 @@
     <string name="title_status_label">Status update</string>
     <string name="status_edit_text_hint">What\'s happening?</string>
     <string name="tweet_button_text">Tweet</string>
-    <string name="tweet_sent_toast">Tweet sent</string>
+    <string name="tweet_sent_snackbar_text">Tweet sent</string>
+    <string name="tweet_sending_network_failure_snackbar_text">Error: network failure</string>
+    <string name="tweet_sending_token_failure_snackbar_text">Error: tokens failure</string>
 </resources>
