@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -31,6 +32,7 @@ public class StatusFragment
     Twitter twitter;
     TextView charsCounterTextView;
     ProgressBar tweetSendingProgressBar;
+    ImageView twitterLogoImageView;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -47,6 +49,8 @@ public class StatusFragment
         statusEditText.addTextChangedListener(this);
         tweetSendingProgressBar = view.findViewById(R.id.tweet_sending_progress_bar);
         tweetSendingProgressBar.setVisibility(View.GONE);
+        twitterLogoImageView = view.findViewById(R.id.twitter_logo_image_view);
+        twitterLogoImageView.setVisibility(View.VISIBLE);
 
         ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
         configurationBuilder.setOAuthConsumerKey(getString(R.string.oauth_consumer_key))
@@ -106,6 +110,7 @@ public class StatusFragment
             super.onPostExecute(result);
 
             tweetSendingProgressBar.setVisibility(View.GONE);
+            twitterLogoImageView.setVisibility(View.VISIBLE);
 
             if (result == SendingStatus.SUCCESSFUL) {
                 Snackbar.make(StatusFragment.this.getView(),
@@ -136,6 +141,7 @@ public class StatusFragment
         protected void onPreExecute() {
             super.onPreExecute();
 
+            twitterLogoImageView.setVisibility(View.GONE);
             tweetSendingProgressBar.setVisibility(View.VISIBLE);
         }
     }
