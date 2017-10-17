@@ -112,21 +112,22 @@ public class StatusFragment
             tweetSendingProgressBar.setVisibility(View.GONE);
             twitterLogoImageView.setVisibility(View.VISIBLE);
 
-            if (result == SendingStatus.SUCCESSFUL) {
-                Snackbar.make(StatusFragment.this.getView(),
+            switch (result) {
+                case SUCCESSFUL: Snackbar.make(StatusFragment.this.getView(),
                         R.string.tweet_sent_snackbar_text,
                         Snackbar.LENGTH_LONG)
                         .show();
-            } else if (result == SendingStatus.TOKEN_FAILED) {
-                Snackbar.make(StatusFragment.this.getView(),
+                    break;
+                case TOKEN_FAILED: Snackbar.make(StatusFragment.this.getView(),
                         R.string.tweet_sending_token_failure_snackbar_text,
                         Snackbar.LENGTH_LONG)
                         .show();
-            } else {
-                Snackbar.make(StatusFragment.this.getView(),
+                    break;
+                default: Snackbar.make(StatusFragment.this.getView(),
                         R.string.tweet_sending_network_failure_snackbar_text,
                         Snackbar.LENGTH_LONG)
                         .show();
+                    break;
             }
         }
 
