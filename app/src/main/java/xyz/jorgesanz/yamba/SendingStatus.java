@@ -7,5 +7,6 @@ package xyz.jorgesanz.yamba;
 enum SendingStatus {
     SUCCESSFUL,
     NETWORK_FAILED,
-    TOKEN_FAILED
+    TOKEN_FAILED,
+    UNKWOWN_FAILED
 }

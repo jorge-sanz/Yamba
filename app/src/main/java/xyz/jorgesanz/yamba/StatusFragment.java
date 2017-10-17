@@ -85,8 +85,14 @@ public class StatusFragment
         int count = 140 - statusEditText.length();
         charsCounterTextView.setText(Integer.toString(count));
         charsCounterTextView.setTextColor(Color.GREEN);
-        if (count < 10) charsCounterTextView.setTextColor(Color.YELLOW);
-        if (count < 0) charsCounterTextView.setTextColor(Color.RED);
+        if (count < 10) {
+            charsCounterTextView.setTextColor(Color.YELLOW);
+            tweetButton.setEnabled(true);
+        }
+        if (count < 0) {
+            charsCounterTextView.setTextColor(Color.RED);
+            tweetButton.setEnabled(false);
+        }
     }
 
     private final class PostTask extends AsyncTask<String, Integer, SendingStatus> {
@@ -100,8 +106,12 @@ public class StatusFragment
             } catch (TwitterException e) {
                 Log.e(TAG, "Sending failure");
                 e.printStackTrace();
-                if (e.getErrorCode() == -1) return SendingStatus.NETWORK_FAILED;
-                return SendingStatus.TOKEN_FAILED;
+                Log.e(TAG, "Cause: " + e.getMessage());
+                Log.e(TAG, "Status code: " + e.getStatusCode());
+                Log.e(TAG, "Error code: " + e.getErrorCode());
+                if (e.isCausedByNetworkIssue()) return SendingStatus.NETWORK_FAILED;
+                if (e.getStatusCode() == 401) return SendingStatus.TOKEN_FAILED;
+                return SendingStatus.UNKWOWN_FAILED;
             }
         }
 
@@ -123,8 +133,13 @@ public class StatusFragment
                         Snackbar.LENGTH_LONG)
                         .show();
                     break;
-                default: Snackbar.make(StatusFragment.this.getView(),
+                case NETWORK_FAILED: Snackbar.make(StatusFragment.this.getView(),
                         R.string.tweet_sending_network_failure_snackbar_text,
+                        Snackbar.LENGTH_LONG)
+                        .show();
+                    break;
+                default: Snackbar.make(StatusFragment.this.getView(),
+                        R.string.tweet_sending_unknown_failure_snackbar_text,
                         Snackbar.LENGTH_LONG)
                         .show();
                     break;
