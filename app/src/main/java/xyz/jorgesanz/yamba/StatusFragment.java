@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import twitter4j.Twitter;
@@ -29,6 +30,7 @@ public class StatusFragment
     Button tweetButton;
     Twitter twitter;
     TextView charsCounterTextView;
+    ProgressBar tweetSendingProgressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -36,13 +38,15 @@ public class StatusFragment
                                 Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_status, container, false);
 
-        statusEditText = (EditText) view.findViewById(R.id.status_edit_text);
-        tweetButton = (Button) view.findViewById(R.id.tweet_button);
+        statusEditText = view.findViewById(R.id.status_edit_text);
+        tweetButton = view.findViewById(R.id.tweet_button);
         tweetButton.setOnClickListener(this);
-        charsCounterTextView = (TextView) view.findViewById(R.id.chars_counter_text_view);
+        charsCounterTextView = view.findViewById(R.id.chars_counter_text_view);
         charsCounterTextView.setText(Integer.toString(140));
         charsCounterTextView.setTextColor(Color.GREEN);
         statusEditText.addTextChangedListener(this);
+        tweetSendingProgressBar = view.findViewById(R.id.tweet_sending_progress_bar);
+        tweetSendingProgressBar.setVisibility(View.GONE);
 
         ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
         configurationBuilder.setOAuthConsumerKey(getString(R.string.oauth_consumer_key))
@@ -81,10 +85,11 @@ public class StatusFragment
         if (count < 0) charsCounterTextView.setTextColor(Color.RED);
     }
 
-    private final class PostTask extends AsyncTask<String, Void, SendingStatus> {
+    private final class PostTask extends AsyncTask<String, Integer, SendingStatus> {
 
         @Override
         protected SendingStatus doInBackground(String... params) {
+
             try {
                 twitter.updateStatus(params[0]);
                 return SendingStatus.SUCCESSFUL;
@@ -99,6 +104,8 @@ public class StatusFragment
         @Override
         protected void onPostExecute(SendingStatus result) {
             super.onPostExecute(result);
+
+            tweetSendingProgressBar.setVisibility(View.GONE);
 
             if (result == SendingStatus.SUCCESSFUL) {
                 Snackbar.make(StatusFragment.this.getView(),
@@ -116,6 +123,20 @@ public class StatusFragment
                         Snackbar.LENGTH_LONG)
                         .show();
             }
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+            super.onProgressUpdate(progress);
+
+            tweetSendingProgressBar.setProgress(progress[0]);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            tweetSendingProgressBar.setVisibility(View.VISIBLE);
         }
     }
 }

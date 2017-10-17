@@ -28,7 +28,14 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="top|center_horizontal"
+        android:background="@android:color/transparent"
         android:hint="@string/status_edit_text_hint"/>
+
+    <ProgressBar
+        android:id="@+id/tweet_sending_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
     
     <Button
         android:id="@+id/tweet_button"
