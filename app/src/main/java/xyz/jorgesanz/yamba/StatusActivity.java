@@ -9,7 +9,6 @@ public class StatusActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // setContentView(R.layout.activity_status);
 
         if (savedInstanceState == null) {
             StatusFragment fragment = new StatusFragment();
