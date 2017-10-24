@@ -7,4 +7,11 @@
     <string name="tweet_sending_token_failure_snackbar_text">Error: tokens incorrectos</string>
     <string name="tweet_sending_network_failure_snackbar_text">Error: falló la conexión</string>
     <string name="tweet_sending_unknown_failure_snackbar_text">Error desconocido</string>
+    <string name="summary_access_token">Por favor, introduce tu Access Token</string>
+    <string name="title_access_token">Access Token</string>
+    <string name="summary_access_token_secret">Por favor, introduce tu Access Token Secret</string>
+    <string name="title_access_token_secret">Access Token Secret</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
