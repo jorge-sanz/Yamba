@@ -7,4 +7,8 @@
     <string name="tweet_sending_network_failure_snackbar_text">Error: network failure</string>
     <string name="tweet_sending_token_failure_snackbar_text">Error: tokens failure</string>
     <string name="tweet_sending_unknown_failure_snackbar_text">Error: Unknown</string>
+    <string name="summary_access_token">Please, introduce your Access Token</string>
+    <string name="title_access_token">Access Token</string>
+    <string name="summary_access_token_secret">Please, introduce your Access Token Secret</string>
+    <string name="title_access_token_secret">Access Token Secret</string>
 </resources>
