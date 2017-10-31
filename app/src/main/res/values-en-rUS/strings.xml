@@ -11,4 +11,7 @@
     <string name="title_access_token">Access Token</string>
     <string name="summary_access_token_secret">Please, introduce your Access Token Secret</string>
     <string name="title_access_token_secret">Access Token Secret</string>
+    <string name="delete">Remove</string>
+    <string name="tweet">Tweet</string>
+    <string name="action_settings">Settings</string>
 </resources>

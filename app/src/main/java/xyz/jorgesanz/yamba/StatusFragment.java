@@ -1,11 +1,15 @@
 package xyz.jorgesanz.yamba;
 
 import android.app.Fragment;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +37,7 @@ public class StatusFragment
     TextView charsCounterTextView;
     ProgressBar tweetSendingProgressBar;
     ImageView twitterLogoImageView;
+    SharedPreferences sharedPreferences;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -52,13 +57,7 @@ public class StatusFragment
         twitterLogoImageView = view.findViewById(R.id.twitter_logo_image_view);
         twitterLogoImageView.setVisibility(View.VISIBLE);
 
-        ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
-        configurationBuilder.setOAuthConsumerKey(getString(R.string.oauth_consumer_key))
-                .setOAuthConsumerSecret(getString(R.string.oauth_consumer_secret))
-                .setOAuthAccessToken(getString(R.string.oauth_access_token))
-                .setOAuthAccessTokenSecret(getString(R.string.oauth_access_token_secret));
-        TwitterFactory twitterFactory = new TwitterFactory(configurationBuilder.build());
-        twitter = twitterFactory.getInstance();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         return view;
     }
@@ -99,6 +98,22 @@ public class StatusFragment
 
         @Override
         protected SendingStatus doInBackground(String... params) {
+
+            String accessToken = sharedPreferences.getString("access_token", "");
+            String accessTokenSecret = sharedPreferences.getString("access_token_secret", "");
+
+            if (TextUtils.isEmpty(accessToken) || TextUtils.isEmpty(accessTokenSecret)) {
+                getActivity().startActivity(new Intent(getActivity(), SettingsActivity.class));
+                return SendingStatus.TOKEN_FAILED;
+            }
+
+            ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
+            configurationBuilder.setOAuthConsumerKey(getString(R.string.oauth_consumer_key))
+                    .setOAuthConsumerSecret(getString(R.string.oauth_consumer_secret))
+                    .setOAuthAccessToken(accessToken)
+                    .setOAuthAccessTokenSecret(accessTokenSecret);
+            TwitterFactory twitterFactory = new TwitterFactory(configurationBuilder.build());
+            twitter = twitterFactory.getInstance();
 
             try {
                 twitter.updateStatus(params[0]);
