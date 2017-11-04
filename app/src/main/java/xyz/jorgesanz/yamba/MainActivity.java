@@ -29,6 +29,11 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_tweet:
                 startActivity(new Intent(this, StatusActivity.class));
                 return true;
+            case R.id.startServiceItem:
+                startService(new Intent(this, RefreshService.class));
+                return true;
+            case R.id.stopServiceItem:
+                stopService(new Intent(this, RefreshService.class));
             default:
                 return false;
         }
