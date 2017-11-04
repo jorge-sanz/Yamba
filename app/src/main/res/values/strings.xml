@@ -17,4 +17,6 @@
     <string name="delete">Borrar</string>
     <string name="tweet">Tweet</string>
     <string name="action_settings">Ajustes</string>
+    <string name="startServiceTitle">Iniciar</string>
+    <string name="stopServiceTitle">Parar</string>
 </resources>

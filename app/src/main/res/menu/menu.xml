@@ -19,4 +19,14 @@
         android:icon="@android:drawable/ic_menu_delete"
         android:title="@string/delete" />
 
+    <item
+        android:id="@+id/startServiceItem"
+        android:title="@string/startServiceTitle"
+        android:icon="@android:drawable/ic_media_play" />
+
+    <item
+        android:id="@+id/stopServiceItem"
+        android:title="@string/stopServiceTitle"
+        android:icon="@android:drawable/ic_media_pause" />
+
 </menu>
