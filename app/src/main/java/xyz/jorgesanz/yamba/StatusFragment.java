@@ -32,10 +32,10 @@ public class StatusFragment
 
     private static final String TAG = "StatusActivity";
     EditText statusEditText;
-    Button tweetButton;
+    Button statusButton;
     Twitter twitter;
     TextView charsCounterTextView;
-    ProgressBar tweetSendingProgressBar;
+    ProgressBar statusSendingProgressBar;
     ImageView twitterLogoImageView;
     SharedPreferences sharedPreferences;
 
@@ -46,14 +46,14 @@ public class StatusFragment
         View view = inflater.inflate(R.layout.fragment_status, container, false);
 
         statusEditText = view.findViewById(R.id.status_edit_text);
-        tweetButton = view.findViewById(R.id.tweet_button);
-        tweetButton.setOnClickListener(this);
+        statusButton = view.findViewById(R.id.status_button);
+        statusButton.setOnClickListener(this);
         charsCounterTextView = view.findViewById(R.id.chars_counter_text_view);
         charsCounterTextView.setText(Integer.toString(140));
         charsCounterTextView.setTextColor(Color.GREEN);
         statusEditText.addTextChangedListener(this);
-        tweetSendingProgressBar = view.findViewById(R.id.tweet_sending_progress_bar);
-        tweetSendingProgressBar.setVisibility(View.GONE);
+        statusSendingProgressBar = view.findViewById(R.id.status_sending_progress_bar);
+        statusSendingProgressBar.setVisibility(View.GONE);
         twitterLogoImageView = view.findViewById(R.id.twitter_logo_image_view);
         twitterLogoImageView.setVisibility(View.VISIBLE);
 
@@ -86,11 +86,11 @@ public class StatusFragment
         charsCounterTextView.setTextColor(Color.GREEN);
         if (count < 10) {
             charsCounterTextView.setTextColor(Color.YELLOW);
-            tweetButton.setEnabled(true);
+            statusButton.setEnabled(true);
         }
         if (count < 0) {
             charsCounterTextView.setTextColor(Color.RED);
-            tweetButton.setEnabled(false);
+            statusButton.setEnabled(false);
         }
     }
 
@@ -134,27 +134,28 @@ public class StatusFragment
         protected void onPostExecute(SendingStatus result) {
             super.onPostExecute(result);
 
-            tweetSendingProgressBar.setVisibility(View.GONE);
+            statusSendingProgressBar.setVisibility(View.GONE);
             twitterLogoImageView.setVisibility(View.VISIBLE);
+            statusEditText.setText("");
 
             switch (result) {
                 case SUCCESSFUL: Snackbar.make(StatusFragment.this.getView(),
-                        R.string.tweet_sent_snackbar_text,
+                        R.string.status_sent_snackbar_text,
                         Snackbar.LENGTH_LONG)
                         .show();
                     break;
                 case TOKEN_FAILED: Snackbar.make(StatusFragment.this.getView(),
-                        R.string.tweet_sending_token_failure_snackbar_text,
+                        R.string.status_sending_token_failure_snackbar_text,
                         Snackbar.LENGTH_LONG)
                         .show();
                     break;
                 case NETWORK_FAILED: Snackbar.make(StatusFragment.this.getView(),
-                        R.string.tweet_sending_network_failure_snackbar_text,
+                        R.string.status_sending_network_failure_snackbar_text,
                         Snackbar.LENGTH_LONG)
                         .show();
                     break;
                 default: Snackbar.make(StatusFragment.this.getView(),
-                        R.string.tweet_sending_unknown_failure_snackbar_text,
+                        R.string.status_sending_unknown_failure_snackbar_text,
                         Snackbar.LENGTH_LONG)
                         .show();
                     break;
@@ -165,7 +166,7 @@ public class StatusFragment
         protected void onProgressUpdate(Integer... progress) {
             super.onProgressUpdate(progress);
 
-            tweetSendingProgressBar.setProgress(progress[0]);
+            statusSendingProgressBar.setProgress(progress[0]);
         }
 
         @Override
@@ -173,7 +174,7 @@ public class StatusFragment
             super.onPreExecute();
 
             twitterLogoImageView.setVisibility(View.GONE);
-            tweetSendingProgressBar.setVisibility(View.VISIBLE);
+            statusSendingProgressBar.setVisibility(View.VISIBLE);
         }
     }
 }
