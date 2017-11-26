@@ -9,10 +9,10 @@
         android:title="@string/action_settings" />
 
     <item
-        android:id="@+id/action_tweet"
+        android:id="@+id/action_status"
         android:icon="@android:drawable/ic_menu_edit"
         app:showAsAction="always|withText"
-        android:title="@string/tweet" />
+        android:title="@string/status" />
 
     <item
         android:id="@+id/action_delete"
