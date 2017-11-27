@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -58,7 +59,6 @@ public class RefreshService extends IntentService {
                 try {
                     List<Status> timeline = twitter.getHomeTimeline();
 
-                    db = dbHelper.getWritableDatabase();
                     ContentValues contentValues = new ContentValues();
 
                     // XXX Use lambda expression forEach
@@ -70,10 +70,8 @@ public class RefreshService extends IntentService {
                         contentValues.put(StatusContract.Column.MESSAGE, status.getText());
                         contentValues.put(StatusContract.Column.CREATED_AT,
                                 status.getCreatedAt().getTime());
-                        db.insertWithOnConflict(StatusContract.TABLE, null, contentValues,
-                                SQLiteDatabase.CONFLICT_IGNORE);
+                        Uri uri = getContentResolver().insert(StatusContract.CONTENT_URI, contentValues);
                     }
-                    db.close();
                 } catch (TwitterException e) {
                     Log.e(TAG, "Failed to fetch the timeline", e);
                 }
