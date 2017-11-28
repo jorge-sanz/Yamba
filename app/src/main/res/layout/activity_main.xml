@@ -6,4 +6,11 @@
     android:layout_height="match_parent"
     tools:context="xyz.jorgesanz.yamba.MainActivity">
 
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/timeline_fragment"
+        android:name="xyz.jorgesanz.yamba.TimelineFragment"
+        android:layout_centerHorizontal="true" />
+
 </android.support.constraint.ConstraintLayout>

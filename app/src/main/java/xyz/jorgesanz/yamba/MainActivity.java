@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,6 +35,11 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.stopServiceItem:
                 stopService(new Intent(this, RefreshService.class));
+                return true;
+            case R.id.action_delete:
+                int rows = getContentResolver().delete(StatusContract.CONTENT_URI, null, null);
+                Toast.makeText(this, R.string.successful_database_restart_toast_text, Toast.LENGTH_LONG).show();
+                return true;
             default:
                 return false;
         }

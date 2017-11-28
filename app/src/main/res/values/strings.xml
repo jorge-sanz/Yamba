@@ -19,4 +19,5 @@
     <string name="action_settings">Ajustes</string>
     <string name="startServiceTitle">Iniciar</string>
     <string name="stopServiceTitle">Parar</string>
+    <string name="successful_database_restart_toast_text">Tweets eliminados de base de datos</string>
 </resources>
